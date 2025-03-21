@@ -2,13 +2,14 @@
 #define __QUEUE_H__
 
 #include <stdbool.h>
+
 typedef int Data;
 
 typedef struct {
     Data *data;
     int head;
     int tail;
-    int len
+    int len;
 } Queue;
 
 Queue queue_create(int len);

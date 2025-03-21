@@ -1,6 +1,9 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef int Data;
 typedef struct Node {
     Data data;

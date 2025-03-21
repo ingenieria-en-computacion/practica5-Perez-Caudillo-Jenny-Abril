@@ -9,7 +9,16 @@
  *          Asigna memoria dinámica a data mediante malloc con un número de elementos igual a len
  */
 Stack stack_create(int len){
-
+    Stack s;
+    s.data = (Data*)malloc(len * sizeof(Data));
+    if (s.data == NULL) {
+        s.len = 0;
+        s.top = -1;
+    } else {
+        s.len = len;
+        s.top = -1;
+    }
+    return s;
 }
 
 /**
@@ -21,7 +30,9 @@ Stack stack_create(int len){
  *          la función no realiza ninguna operación.
  */
 void stack_push(Stack* s, Data d){
-
+    if (s->top < s->len - 1) {
+        s->data[++s->top] = d;
+    }
 }
 
 /**
@@ -34,7 +45,10 @@ void stack_push(Stack* s, Data d){
  *          Si la pila está vacía, no se realiza ninguna operación y se devuelve un valor de error.
  */
 Data stack_pop(Stack* s){
-
+    if (s->top >= 0) {
+        return s->data[s->top--];
+    }
+    return -1; 
 }
 
 /**
@@ -45,8 +59,14 @@ Data stack_pop(Stack* s){
  * @details Esta función comprueba si la pila no contiene elementos. Es útil para evitar operaciones
  *          como `stack_pop` en una pila vacía.
  */
-int stack_is_empty(Stack* s){
-
+bool stack_is_empty(Stack* s){
+    if (s == NULL) {
+        return -1;
+    }
+    if (s->top == -1) {
+        return 1; 
+    }
+    return 0;
 }
 
 /**
@@ -56,7 +76,9 @@ int stack_is_empty(Stack* s){
  * @details Esta función hace que top sea igual a -1
  */
 void stack_empty(Stack* s){
-
+    if ( s != NULL ) {
+        s -> top = - 1 ;
+    }
 }
 
 /**
@@ -66,7 +88,8 @@ void stack_empty(Stack* s){
  * @details Esta función libera la memoria asignada dinámicamente para data dentro de la pila
  */
 void stack_delete(Stack *s){
-
+    free(s->data);
+    s->data = NULL;
 }
 
 /**
@@ -79,5 +102,18 @@ void stack_delete(Stack *s){
  *          la salida estándar (stdout).
  */
 void stack_print(Stack *s){
+    if (s == NULL || s->data == NULL) {
+        printf("Pila inválida o vacía.\n");
+        return;
+    }
+    if (s->top == -1) {
+        printf("La pila está vacía.\n");
+        return;
+    }
 
+    printf("Pila: ");
+    for (int i = s->top; i >= 0; i--) {
+        printf("%d ", s->data[i]);
+    }
+    printf("\n");
 }

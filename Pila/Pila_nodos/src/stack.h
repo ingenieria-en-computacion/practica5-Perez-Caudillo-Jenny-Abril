@@ -2,6 +2,8 @@
 #define __STACK_H__
 #include "node.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 typedef struct {

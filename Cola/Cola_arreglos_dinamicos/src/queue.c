@@ -9,7 +9,12 @@
  * @details Esta función inicializa una cola vacía. Asigna memoria dinàmica con malloc al arreglo data usando len
  */
 Queue queue_create(int len){
-
+    Queue q;
+    q.data = (Data*)malloc(len * sizeof(Data));
+    q.head = 0;
+    q.tail = -1;
+    q.len = len;
+    return q;
 }
 
 /**
@@ -20,7 +25,10 @@ Queue queue_create(int len){
  * @details Esta función añade el dato `d` al final de la cola.
  */
 void queue_enqueue(Queue* q, Data d){
-
+    if (q != NULL && q->data != NULL && (q->tail - q->head + q->len + 1) % q->len < q->len - 1) {
+        q->tail = (q->tail + 1) % q->len;
+        q->data[q->tail] = d;
+    }
 }
 
 /**
@@ -33,7 +41,14 @@ void queue_enqueue(Queue* q, Data d){
  *          Si la cola está vacía, no se realiza ninguna operación y se devuelve un valor de error.
  */
 Data queue_dequeue(Queue* q){
-
+    if (q == NULL || q->data == NULL || queue_is_empty(q)) {
+        return -1; // Valor de error
+    }
+    
+    Data dato = q->data[q->head];
+    q->head = (q->head + 1) % q->len;
+    
+    return dato;
 }
 
 /**
@@ -45,7 +60,7 @@ Data queue_dequeue(Queue* q){
  *          como `queue_dequeue` en una cola vacía.
  */
 bool queue_is_empty(Queue* q){
-
+    return (q == NULL || q->data == NULL || (q->head == ((q->tail + 1) % q->len)));
 }
 
 /**
@@ -57,7 +72,11 @@ bool queue_is_empty(Queue* q){
  *          Si la cola está vacía, no se realiza ninguna operación y se devuelve un valor de error.
  */
 Data queue_front(Queue* q){
-
+    if (q == NULL || q->data == NULL || queue_is_empty(q)) {
+        return -1; // Valor de error
+    }
+    
+    return q->data[q->head];
 }
 
 /**
@@ -67,7 +86,10 @@ Data queue_front(Queue* q){
  * @details Esta función hace que los índices head y tail tomen el valor de -1
  */
 void queue_empty(Queue* q){
-
+    if (q != NULL) {
+        q->head = 0;
+        q->tail = -1;
+    }
 }
 
 /**
@@ -79,5 +101,10 @@ void queue_empty(Queue* q){
  *          de ser eliminada.
  */
 void queue_delete(Queue* q){
-
+    if (q != NULL && q->data != NULL) {
+        free(q->data);
+        q->data = NULL;
+        q->head = 0;
+        q->tail = -1;
+    }
 }

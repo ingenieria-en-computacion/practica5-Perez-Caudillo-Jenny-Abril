@@ -1,5 +1,4 @@
 #include "queue.h"
-#include <stdlib.h>
 
 /**
  * Crea una nueva cola vacía y la devuelve.
@@ -9,7 +8,11 @@
  * @details Esta función inicializa una cola vacía. 
  */
 Queue queue_create(){
-
+    Queue q;
+    q.head = 0;
+    q.tail = -1;
+    q.len = 0;
+    return q;
 }
 
 /**
@@ -20,7 +23,11 @@ Queue queue_create(){
  * @details Esta función añade el dato `d` al final de la cola.
  */
 void queue_enqueue(Queue* q, Data d){
-
+    if (q != NULL && q->len < TAM) {
+        q->tail = (q->tail + 1) % TAM;
+        q->datos[q->tail] = d;
+        q->len++;
+    }
 }
 
 /**
@@ -33,7 +40,15 @@ void queue_enqueue(Queue* q, Data d){
  *          Si la cola está vacía, no se realiza ninguna operación y se devuelve un valor de error.
  */
 Data queue_dequeue(Queue* q){
-
+    if (q == NULL || q->len == 0) {
+        return -1; // Valor de error
+    }
+    
+    Data dato = q->datos[q->head];
+    q->head = (q->head + 1) % TAM;
+    q->len--;
+    
+    return dato;
 }
 
 /**
@@ -45,7 +60,7 @@ Data queue_dequeue(Queue* q){
  *          como `queue_dequeue` en una cola vacía.
  */
 bool queue_is_empty(Queue* q){
-
+    return (q == NULL || q->len == 0);
 }
 
 /**
@@ -57,7 +72,11 @@ bool queue_is_empty(Queue* q){
  *          Si la cola está vacía, no se realiza ninguna operación y se devuelve un valor de error.
  */
 Data queue_front(Queue* q){
-
+    if (q == NULL || q->len == 0) {
+        return -1; // Valor de error
+    }
+    
+    return q->datos[q->head];
 }
 
 /**
@@ -67,6 +86,22 @@ Data queue_front(Queue* q){
  * @details Esta función hace que los índices head y tail tomen el valor de -1
  */
 void queue_empty(Queue* q){
-
+    if (q != NULL) {
+        q->head = 0;
+        q->tail = -1;
+        q->len = 0;
+    }
 }
 
+/**
+ * Libera la memoria asignada a la cola.
+ *
+ * @param q Referencia a la cola que se desea liberar.
+ * @details Esta función libera la memoria ocupada por la cola.
+ */
+ void queue_delete(Queue* q){
+    // Como la estructura es estática (arreglo fijo),
+    // no hay memoria dinámica que liberar.
+    // Sin embargo, podemos resetear los valores
+    queue_empty(q);
+}

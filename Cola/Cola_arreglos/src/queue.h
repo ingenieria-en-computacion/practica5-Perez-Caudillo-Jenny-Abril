@@ -2,6 +2,7 @@
 #define __QUEUE_H__
 
 #include <stdbool.h>
+#include <stdlib.h>
 typedef int Data;
 #define TAM 100
 
@@ -9,7 +10,7 @@ typedef struct {
     Data datos[TAM];
     int head;
     int tail;
-    int len
+    int len;
 } Queue;
 
 Queue queue_create();

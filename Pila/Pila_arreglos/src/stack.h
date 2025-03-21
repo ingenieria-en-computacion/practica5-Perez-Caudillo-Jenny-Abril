@@ -2,6 +2,8 @@
 #define __STACK_H__
 
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 typedef int Data;
 #define TAM 100
 
